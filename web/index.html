@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Video Stream</title>
+</head>
+<body>
+    <h1>Live Video Stream</h1>
+    <img id="video-stream" alt="Live Video Stream">
+
+    <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
+    <script>
+        // Function to update the image source with the latest video frame
+        function updateImage(src) {
+            document.getElementById('video-stream').src = src;
+        }
+
+        // Set up a Socket.IO connection
+        const socket = io();
+
+        // Handle messages received from the server
+        socket.on('image', (imageBuffer) => {
+            const imageUrl = 'data:image/jpeg;base64,' + btoa(new Uint8Array(imageBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+            updateImage(imageUrl);
+        });
+    </script>
+</body>
+</html>
